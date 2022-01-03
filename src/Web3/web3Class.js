@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import Web3 from "web3";
 import stakeingAbi from "./abi/stakingAbi.json";
+import tokenAbi from "./abi/tokenAbi.json";
+
 import { fetchAccountDetails } from "./web3";
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
@@ -23,6 +25,11 @@ export class web3Class {
     this.hi = "test";
     this.address = "0xfB1D5ebB83bA661491C0bf6135007f652d3A3203";
     this.contract = new web3.eth.Contract(stakeingAbi, this.address);
+    this.tokenContractAddress = "0x64D4DDcDe656e760caCAB4166Fc0028C0fefb9c2";
+    this.tokenContract = new web3.eth.Contract(
+      tokenAbi,
+      this.tokenContractAddress
+    );
   }
 
   showAddress() {
@@ -74,18 +81,59 @@ export class web3Class {
       }
     });
   };
-  Stake = (num, account) => {
+  Stake = (stakeVal, account) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // contract = new web3.eth.Contract(stakeingAbi, address);
-        const stake = await this.contract.methods
-          .stake(num)
+        const token = await this.tokenContract.methods
+          .approve(this.address, web3.utils.toWei(stakeVal, "ether"))
           .send({ from: account });
-        resolve(web3.utils.fromWei(stake, "ether"));
+        resolve(
+          await this.contract.methods
+            .stake(web3.utils.toWei(stakeVal, "ether"))
+            .send({ from: account })
+        );
       } catch (error) {
         console.log(error);
         reject(error);
       }
     });
   };
+  totalReward() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const contractData = await this.contract.methods.totalReward().call();
+        resolve(web3.utils.fromWei(contractData, "ether"));
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
+  userDeposit(account) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userDep = await this.contract.methods
+          .userDeposits(account)
+          .call();
+        console.log(userDep);
+        resolve(web3.utils.fromWei(userDep[0], "ether"));
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
+  calculate(account) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userReward = await this.contract.methods
+          .calculate(account)
+          .call();
+        resolve(web3.utils.fromWei(userReward, "ether"));
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
 }

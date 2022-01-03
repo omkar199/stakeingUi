@@ -13,9 +13,10 @@ import {
   MaxBtn,
 } from "../MyPosition/MyPosition.styles";
 import { LockPeriod, LockTime } from "./StakingScreen.styles";
+import { useAccountChange } from "../../../../hooks";
 import Asva from "../MyPosition/assets/asva.png";
 import Lock from "../MyPosition/assets/lock.png";
-import { web3Class, fetchAccountDetails } from "../../../../Web3/web3Class";
+import { web3Class } from "../../../../Web3/web3Class";
 // import { fetchAccountDetails, Stake } from "../../../../Web3/web3";
 
 const StakingScreen = () => {
@@ -24,19 +25,22 @@ const StakingScreen = () => {
   let userAcc;
   console.log(lockPeriod);
   console.log(stake);
-  const getDetails = async () => {
-    let web3Instance = new web3Class();
-    let account = await web3Instance.fetchAccountDetails();
-    userAcc = account.account.address;
-    console.log(userAcc);
-  };
+  const account = useAccountChange();
+
+  console.log(account);
+  // const getDetails = async () => {
+  //   let web3Instance = new web3Class();
+  //   let account = await web3Instance.fetchAccountDetails();
+  //   userAcc = account.account.address;
+  //   console.log(userAcc);
+  // };
   const Stakeing = async () => {
     let web3Instance = new web3Class();
-    let sendTkn = await web3Instance.Stake(stake, userAcc);
+    let sendTkn = await web3Instance.Stake(stake, account);
     console.log(sendTkn);
   };
   useEffect(() => {
-    getDetails();
+    // getDetails();
   }, []);
   return (
     <>

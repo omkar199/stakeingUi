@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ClaimButton,
@@ -18,13 +18,38 @@ import {
 import MyPosition from "./components/MyPosition/MyPosition";
 import StakingScreen from "./components/StakingScreen/StakingScreen";
 import StakingPopup from "../Modal/StakingPopup/StakingPopup";
-
+import { web3Class } from "../../Web3/web3Class";
+import { useAccountChange } from "../../hooks";
 const Staking = () => {
   const [currentTab, setCurrentTab] = useState("My Position");
   const [showStakingPopup, setShowStakingPopup] = useState(false);
-
+  const [reward, setReward] = useState(null);
+  const [deposit, setDeposit] = useState(null);
+  const [userReward, setUserReward] = useState(null);
   const openStakingPopup = () => setShowStakingPopup(true);
+  const account = useAccountChange();
+  console.log(account);
+  const totalReward = async () => {
+    let web3Instance = new web3Class();
+    let rewards = await web3Instance.totalReward();
+    setReward(rewards);
+  };
 
+  useEffect(() => {
+    totalReward();
+    const userDeposit = async () => {
+      let web3Instance = new web3Class();
+      let deposit = await web3Instance.userDeposit(account);
+      setDeposit(deposit);
+    };
+    const calculateUserReward = async () => {
+      let web3Instance = new web3Class();
+      let userReward = await web3Instance.calculate(account);
+      setUserReward(userReward);
+    };
+    userDeposit();
+    calculateUserReward();
+  }, []);
   return (
     <>
       <StakingPopup
@@ -37,20 +62,20 @@ const Staking = () => {
 
           <OverviewList>
             <OverviewItem>
-              <OverviewHeading>$54,098,909</OverviewHeading>
-              <OverviewText>Total Value Locked</OverviewText>
+              <OverviewHeading>{`${reward} ASVA`}</OverviewHeading>
+              <OverviewText>Total Reward</OverviewText>
             </OverviewItem>
 
             <OverviewItem>
-              <OverviewHeading>$54,098,909</OverviewHeading>
-              <OverviewText>Total Value Locked</OverviewText>
+              <OverviewHeading>{`${deposit} ASVA`}</OverviewHeading>
+              <OverviewText>Stake Value Locked</OverviewText>
             </OverviewItem>
 
             <OverviewItem>
               <OverviewContent>
                 <div>
-                  <OverviewHeading>$54,098,909</OverviewHeading>
-                  <OverviewText>Total Value Locked</OverviewText>
+                  <OverviewHeading>{`${userReward} ASVA`}</OverviewHeading>
+                  <OverviewText>Rewards</OverviewText>
                 </div>
                 <ClaimButton>Claim</ClaimButton>
               </OverviewContent>
