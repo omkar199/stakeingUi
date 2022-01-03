@@ -136,4 +136,17 @@ export class web3Class {
       }
     });
   }
+  Withdraws = (account) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const withdrawToken = await this.contract.methods
+          .withdraw()
+          .send({ from: account });
+        resolve(withdrawToken);
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  };
 }
