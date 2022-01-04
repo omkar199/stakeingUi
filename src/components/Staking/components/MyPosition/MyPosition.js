@@ -21,7 +21,7 @@ import { useAccountChange } from "../../../../hooks";
 const MyPosition = () => {
   const [unStake, setUnStake] = useState("0");
   const account = useAccountChange();
-  console.log(account);
+
   const unstakes = async () => {
     let web3Instance = new web3Class();
     let sendTkn = await web3Instance.Withdraws(account);

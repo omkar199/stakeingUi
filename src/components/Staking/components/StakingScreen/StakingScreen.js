@@ -22,12 +22,10 @@ import { web3Class } from "../../../../Web3/web3Class";
 const StakingScreen = () => {
   const [lockPeriod, setLockPeriod] = useState("30");
   const [stake, setStake] = useState("0");
-  let userAcc;
-  console.log(lockPeriod);
-  console.log(stake);
+
   const account = useAccountChange();
 
-  console.log(account);
+  // console.log(account);
   // const getDetails = async () => {
   //   let web3Instance = new web3Class();
   //   let account = await web3Instance.fetchAccountDetails();

@@ -28,27 +28,27 @@ const Staking = () => {
   const [userReward, setUserReward] = useState(null);
   const openStakingPopup = () => setShowStakingPopup(true);
   const account = useAccountChange();
-  console.log(account);
-  const totalReward = async () => {
-    let web3Instance = new web3Class();
-    let rewards = await web3Instance.totalReward();
-    setReward(rewards);
+  // console.log(account);
+  const getData = async () => {
+    if (account !== undefined) {
+      let web3Instance = new web3Class();
+      web3Instance.showAddress();
+      let rewards = await web3Instance.totalReward();
+
+      console.log(rewards);
+
+      // let deposit = await web3Instance.userDeposit(account);
+      // let userReward = await web3Instance.calculate(account);
+
+      // setReward(rewards);
+      // setDeposit(deposit);
+      // setUserReward(userReward);
+    }
   };
-  const userDeposit = async () => {
-    let web3Instance = new web3Class();
-    let deposit = await web3Instance.userDeposit(account);
-    setDeposit(deposit);
-  };
-  const calculateUserReward = async () => {
-    let web3Instance = new web3Class();
-    let userReward = await web3Instance.calculate(account);
-    setUserReward(userReward);
-  };
+
   useEffect(() => {
-    totalReward();
-    // userDeposit();
-    // calculateUserReward();
-  }, []);
+    getData();
+  }, [account]);
   return (
     <>
       <StakingPopup

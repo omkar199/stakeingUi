@@ -22,7 +22,6 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 // }
 export class web3Class {
   constructor() {
-    this.hi = "test";
     this.address = "0xfB1D5ebB83bA661491C0bf6135007f652d3A3203";
     this.contract = new web3.eth.Contract(stakeingAbi, this.address);
     this.tokenContractAddress = "0x64D4DDcDe656e760caCAB4166Fc0028C0fefb9c2";
@@ -33,7 +32,7 @@ export class web3Class {
   }
 
   showAddress() {
-    console.log(this.hi);
+    console.log(this.contract);
   }
 
   getTotalAmount() {
@@ -42,6 +41,8 @@ export class web3Class {
         const contractData = await this.contractInstance.methods
           .totalAmount()
           .call();
+
+        console.log(contractData);
         resolve(web3.utils.fromWei(contractData, "ether"));
       } catch (error) {
         console.log(error);
@@ -101,6 +102,7 @@ export class web3Class {
     return new Promise(async (resolve, reject) => {
       try {
         const contractData = await this.contract.methods.totalReward().call();
+        // console.log()
         resolve(web3.utils.fromWei(contractData, "ether"));
       } catch (error) {
         console.log(error);
