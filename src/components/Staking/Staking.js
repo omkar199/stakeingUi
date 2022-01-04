@@ -21,7 +21,7 @@ import StakingPopup from "../Modal/StakingPopup/StakingPopup";
 import { web3Class } from "../../Web3/web3Class";
 import { useAccountChange } from "../../hooks";
 const Staking = () => {
-  const [currentTab, setCurrentTab] = useState("My Position");
+  const [currentTab, setCurrentTab] = useState("Staking");
   const [showStakingPopup, setShowStakingPopup] = useState(false);
   const [reward, setReward] = useState(null);
   const [deposit, setDeposit] = useState(null);
@@ -34,21 +34,20 @@ const Staking = () => {
     let rewards = await web3Instance.totalReward();
     setReward(rewards);
   };
-
+  const userDeposit = async () => {
+    let web3Instance = new web3Class();
+    let deposit = await web3Instance.userDeposit(account);
+    setDeposit(deposit);
+  };
+  const calculateUserReward = async () => {
+    let web3Instance = new web3Class();
+    let userReward = await web3Instance.calculate(account);
+    setUserReward(userReward);
+  };
   useEffect(() => {
     totalReward();
-    const userDeposit = async () => {
-      let web3Instance = new web3Class();
-      let deposit = await web3Instance.userDeposit(account);
-      setDeposit(deposit);
-    };
-    const calculateUserReward = async () => {
-      let web3Instance = new web3Class();
-      let userReward = await web3Instance.calculate(account);
-      setUserReward(userReward);
-    };
-    userDeposit();
-    calculateUserReward();
+    // userDeposit();
+    // calculateUserReward();
   }, []);
   return (
     <>

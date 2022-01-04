@@ -46,7 +46,7 @@ const StakingScreen = () => {
     <>
       <IdoDetails>
         <IdoIcon src={Asva} alt="asva" />
-        <IdoHeading>ASVA IDO</IdoHeading>
+        <IdoHeading>ASVA</IdoHeading>
         <Tag type="interest">Interest 10.5% APY</Tag>
       </IdoDetails>
       <LockPeriod>

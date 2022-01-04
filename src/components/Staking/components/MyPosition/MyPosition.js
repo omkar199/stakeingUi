@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   IdoDetails,
@@ -16,13 +16,25 @@ import {
 
 import Asva from "./assets/asva.png";
 import Lock from "./assets/lock.png";
+import { web3Class } from "../../../../Web3/web3Class";
+import { useAccountChange } from "../../../../hooks";
 const MyPosition = () => {
   const [unStake, setUnStake] = useState("0");
+  const account = useAccountChange();
+  console.log(account);
+  const unstakes = async () => {
+    let web3Instance = new web3Class();
+    let sendTkn = await web3Instance.Withdraws(account);
+    console.log(sendTkn);
+  };
+  // useEffect(() => {
+  //   unstakes();
+  // }, []);
   return (
     <>
       <IdoDetails>
         <IdoIcon src={Asva} alt="asva" />
-        <IdoHeading>ASVA IDO</IdoHeading>
+        <IdoHeading>ASVA</IdoHeading>
         <Tag type="interest">Interest 10.5% APY</Tag>
         <Tag type="time">
           <LockIcon src={Lock} alt="lock" />
@@ -48,7 +60,7 @@ const MyPosition = () => {
         <MaxBtn>Max</MaxBtn>
       </StakeInputWrapper>
 
-      <StakeButton>UNSTAKE ASVA</StakeButton>
+      <StakeButton onClick={unstakes}>UNSTAKE ASVA</StakeButton>
     </>
   );
 };

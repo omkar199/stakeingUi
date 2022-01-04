@@ -84,14 +84,13 @@ export class web3Class {
   Stake = (stakeVal, account) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const token = await this.tokenContract.methods
+        await this.tokenContract.methods
           .approve(this.address, web3.utils.toWei(stakeVal, "ether"))
           .send({ from: account });
-        resolve(
-          await this.contract.methods
-            .stake(web3.utils.toWei(stakeVal, "ether"))
-            .send({ from: account })
-        );
+        const stake = await this.contract.methods
+          .stake(web3.utils.toWei(stakeVal, "ether"))
+          .send({ from: account });
+        resolve(stake);
       } catch (error) {
         console.log(error);
         reject(error);
@@ -143,6 +142,7 @@ export class web3Class {
           .withdraw()
           .send({ from: account });
         resolve(withdrawToken);
+        console.log(withdrawToken);
       } catch (error) {
         console.log(error);
         reject(error);
